@@ -11,6 +11,8 @@ import com.ghost.server.domain.run.dto.GhostSummaryDto;
 import com.ghost.server.domain.run.dto.RunDetailResponse;
 import com.ghost.server.domain.run.dto.RunStartRequest;
 import com.ghost.server.domain.run.dto.RunStartResponse;
+import com.ghost.server.domain.run.dto.RunStopRequest;
+import com.ghost.server.domain.run.dto.RunStopResponse;
 import com.ghost.server.domain.run.dto.TrackPointDto;
 import com.ghost.server.domain.run.entity.RunSession;
 import com.ghost.server.domain.run.entity.RunStatus;
@@ -83,6 +85,46 @@ public class RunSessionService {
                         trackPointRepository.findMaxTByRunSessionId(run.getId()).orElse(0)
                 ))
                 .orElse(null);
+    }
+
+    @Transactional
+    public RunStopResponse stop(Long currentUserId, String runIdParam, RunStopRequest request) {
+        Long runId = PublicIdCodec.decode(RUN_ID_PREFIX, runIdParam)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RUN_NOT_FOUND));
+        RunSession run = runSessionRepository.findById(runId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RUN_NOT_FOUND));
+
+        if (!run.getUser().getId().equals(currentUserId)) {
+            throw new BusinessException(ErrorCode.RUN_NOT_FOUND);
+        }
+        if (run.getStatus() != RunStatus.ACTIVE) {
+            throw new BusinessException(ErrorCode.RUN_NOT_ACTIVE);
+        }
+
+        run.complete(
+                request.endedAt(),
+                request.totalTime(),
+                request.distance(),
+                request.avgPace(),
+                request.calories()
+        );
+
+        Long courseId = run.getCourse().getId();
+        boolean isNewRecord = runSessionRepository
+                .findFirstByCourseIdAndUserIdAndStatusAndIdNotOrderByTotalTimeAsc(
+                        courseId, currentUserId, RunStatus.COMPLETED, run.getId())
+                .map(prev -> request.totalTime() < prev.getTotalTime())
+                .orElse(true);
+
+        long rank = runSessionRepository
+                .countByCourseIdAndStatusAndTotalTimeLessThan(courseId, RunStatus.COMPLETED, request.totalTime()) + 1;
+
+        return new RunStopResponse(
+                PublicIdCodec.encode(RUN_ID_PREFIX, run.getId()),
+                run.getStatus(),
+                isNewRecord,
+                rank
+        );
     }
 
     public RunDetailResponse findById(String runIdParam) {
