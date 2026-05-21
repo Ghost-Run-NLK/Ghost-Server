@@ -27,7 +27,7 @@ public class LeaderboardController {
 
     @Operation(
             summary = "코스 리더보드 조회",
-            description = "코스의 상위 10등 COMPLETED 기록을 반환한다. 로그인 상태면 본인 기록에 isMe=true, 게스트는 전부 false."
+            description = "코스의 상위 10등 COMPLETED 기록을 반환한다. 본인 기록 entry는 isMe=true."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
