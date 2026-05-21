@@ -20,12 +20,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -72,8 +72,7 @@ public class RunController {
     })
     @PostMapping
     public RunStartResponse start(
-            @Parameter(description = "현재 유저 ID (auth PR 전 임시 헤더)", example = "1", required = true)
-            @RequestHeader("X-User-Id") Long currentUserId,
+            @AuthenticationPrincipal Long currentUserId,
             @Valid @RequestBody RunStartRequest request
     ) {
         return runSessionService.start(currentUserId, request);
@@ -113,8 +112,7 @@ public class RunController {
     })
     @PostMapping("/{runId}/locations")
     public LocationBatchResponse receiveLocations(
-            @Parameter(description = "현재 유저 ID (auth PR 전 임시 헤더)", example = "1", required = true)
-            @RequestHeader("X-User-Id") Long currentUserId,
+            @AuthenticationPrincipal Long currentUserId,
             @Parameter(description = "러닝 세션 ID", example = "run_1", required = true)
             @PathVariable String runId,
             @Valid @RequestBody LocationBatchRequest request
@@ -156,8 +154,7 @@ public class RunController {
     })
     @PatchMapping("/{runId}/stop")
     public RunStopResponse stop(
-            @Parameter(description = "현재 유저 ID (auth PR 전 임시 헤더)", example = "1", required = true)
-            @RequestHeader("X-User-Id") Long currentUserId,
+            @AuthenticationPrincipal Long currentUserId,
             @Parameter(description = "러닝 세션 ID", example = "run_1", required = true)
             @PathVariable String runId,
             @Valid @RequestBody RunStopRequest request
@@ -176,10 +173,7 @@ public class RunController {
             )
     )
     @GetMapping("/active")
-    public ActiveRunResponse active(
-            @Parameter(description = "현재 유저 ID (auth PR 전 임시 헤더)", example = "1", required = true)
-            @RequestHeader("X-User-Id") Long currentUserId
-    ) {
+    public ActiveRunResponse active(@AuthenticationPrincipal Long currentUserId) {
         return runSessionService.findActive(currentUserId);
     }
 
