@@ -16,6 +16,7 @@ public enum ErrorCode {
 
     // Course
     COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "COURSE_NOT_FOUND", "코스를 찾을 수 없습니다"),
+    COURSE_IN_USE(HttpStatus.CONFLICT, "COURSE_IN_USE", "러닝 기록이 존재하는 코스는 삭제할 수 없습니다"),
 
     // Run
     RUN_NOT_FOUND(HttpStatus.NOT_FOUND, "RUN_NOT_FOUND", "러닝 세션을 찾을 수 없습니다"),
