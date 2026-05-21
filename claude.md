@@ -133,3 +133,36 @@ COMPLETED  러닝 종료
 ## 참고 문서
 
 - `requirements.md`: 기능 요구사항 및 API 명세 전체
+
+
+## 브랜치 규칙
+
+- 작업 단위로 브랜치 생성 후 작업
+- develop 브랜치에서 작업 브랜치 생성
+- 브랜치 형식: `type/domain-feature`
+```
+feat/course-api
+feat/run-api
+feat/leaderboard-api
+feat/auth
+fix/track-point-duplicate
+refactor/run-service
+```
+
+- 브랜치 type 종류: `feat`, `fix`, `refactor`, `chore`
+---
+
+## 커밋 규칙
+
+- 작업 완료 시 유의미한 단위로 쪼개서 커밋
+- 여러 작업을 한 번에 모아서 커밋하지 않음
+- 커밋 메시지 형식: `type: 내용`
+```
+feat: 러닝 세션 시작 API 구현
+feat: 위치 배치 수신 API 구현
+feat: 리더보드 조회 API 구현
+refactor: RunService 중복 로직 제거
+fix: TrackPoint 중복 저장 버그 수정
+```
+
+- type 종류: `feat`, `fix`, `refactor`, `test`, `chore`
