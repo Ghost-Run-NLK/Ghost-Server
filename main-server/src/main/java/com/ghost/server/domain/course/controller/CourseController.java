@@ -3,6 +3,7 @@ package com.ghost.server.domain.course.controller;
 import com.ghost.server.common.exception.BusinessException;
 import com.ghost.server.common.exception.ErrorCode;
 import com.ghost.server.common.response.ApiResponse;
+import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.course.dto.CourseDetailResponse;
 import com.ghost.server.domain.course.dto.CourseListResponse;
 import com.ghost.server.domain.course.service.CourseService;
@@ -70,17 +71,8 @@ public class CourseController {
             @Parameter(description = "코스 ID (예: course_1)", example = "course_1", required = true)
             @PathVariable String courseId
     ) {
-        return courseService.findById(parseCourseId(courseId));
-    }
-
-    private static Long parseCourseId(String courseId) {
-        if (courseId == null || !courseId.startsWith(COURSE_ID_PREFIX)) {
-            throw new BusinessException(ErrorCode.COURSE_NOT_FOUND);
-        }
-        try {
-            return Long.parseLong(courseId.substring(COURSE_ID_PREFIX.length()));
-        } catch (NumberFormatException e) {
-            throw new BusinessException(ErrorCode.COURSE_NOT_FOUND);
-        }
+        Long id = PublicIdCodec.decode(COURSE_ID_PREFIX, courseId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
+        return courseService.findById(id);
     }
 }
