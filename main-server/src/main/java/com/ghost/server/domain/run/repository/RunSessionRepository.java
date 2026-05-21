@@ -13,6 +13,8 @@ public interface RunSessionRepository extends JpaRepository<RunSession, Long> {
 
     boolean existsByUserIdAndStatus(Long userId, RunStatus status);
 
+    boolean existsByCourseId(Long courseId);
+
     long countByCourseIdAndStatusAndTotalTimeLessThan(Long courseId, RunStatus status, int totalTime);
 
     Optional<RunSession> findFirstByCourseIdAndUserIdAndStatusAndIdNotOrderByTotalTimeAsc(

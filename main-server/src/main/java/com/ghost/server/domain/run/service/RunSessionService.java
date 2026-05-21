@@ -156,6 +156,10 @@ public class RunSessionService {
         );
     }
 
+    public boolean existsForCourse(Long courseId) {
+        return runSessionRepository.existsByCourseId(courseId);
+    }
+
     private RunSession resolveGhost(String ghostRunIdParam, Long courseId) {
         if (ghostRunIdParam == null || ghostRunIdParam.isBlank()) {
             return null;
