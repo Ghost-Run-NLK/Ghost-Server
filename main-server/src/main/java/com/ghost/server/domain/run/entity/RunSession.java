@@ -79,4 +79,17 @@ public class RunSession extends BaseEntity {
         this.status = status;
         this.startedAt = startedAt;
     }
+
+    public void complete(LocalDateTime endedAt,
+                         int totalTime,
+                         int distance,
+                         String avgPace,
+                         int calories) {
+        this.status = RunStatus.COMPLETED;
+        this.endedAt = endedAt;
+        this.totalTime = totalTime;
+        this.distance = distance;
+        this.avgPace = avgPace;
+        this.calories = calories;
+    }
 }
