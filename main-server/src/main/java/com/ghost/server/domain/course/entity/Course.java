@@ -67,4 +67,19 @@ public class Course extends BaseEntity {
         this.endLat = endLat;
         this.endLng = endLng;
     }
+
+    public void update(String name, String address, int distance,
+                       double centerLat, double centerLng,
+                       double startLat, double startLng,
+                       double endLat, double endLng) {
+        this.name = name;
+        this.address = address;
+        this.distance = distance;
+        this.centerLat = centerLat;
+        this.centerLng = centerLng;
+        this.startLat = startLat;
+        this.startLng = startLng;
+        this.endLat = endLat;
+        this.endLng = endLng;
+    }
 }
