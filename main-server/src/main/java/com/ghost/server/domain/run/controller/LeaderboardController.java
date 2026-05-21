@@ -11,9 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +27,7 @@ public class LeaderboardController {
 
     @Operation(
             summary = "코스 리더보드 조회",
-            description = "코스의 상위 10등 COMPLETED 기록을 반환한다. X-User-Id 헤더가 있으면 본인 기록에 isMe=true."
+            description = "코스의 상위 10등 COMPLETED 기록을 반환한다. 본인 기록 entry는 isMe=true."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -50,8 +50,7 @@ public class LeaderboardController {
     public LeaderboardResponse leaderboard(
             @Parameter(description = "코스 ID", example = "course_1", required = true)
             @PathVariable String courseId,
-            @Parameter(description = "현재 유저 ID (선택, 없으면 isMe 전부 false)", example = "1")
-            @RequestHeader(value = "X-User-Id", required = false) Long currentUserId
+            @AuthenticationPrincipal Long currentUserId
     ) {
         return leaderboardService.find(courseId, currentUserId);
     }

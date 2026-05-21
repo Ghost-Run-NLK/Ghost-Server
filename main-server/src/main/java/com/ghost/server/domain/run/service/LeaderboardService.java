@@ -49,7 +49,7 @@ public class LeaderboardService {
 
     private LeaderboardEntry toEntry(int rank, RunSession run, Long currentUserId) {
         User user = run.getUser();
-        boolean isMe = currentUserId != null && currentUserId.equals(user.getId());
+        boolean isMe = currentUserId.equals(user.getId());
         return new LeaderboardEntry(
                 rank,
                 PublicIdCodec.encode(RUN_ID_PREFIX, run.getId()),

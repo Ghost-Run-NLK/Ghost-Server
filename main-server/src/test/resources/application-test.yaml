@@ -8,3 +8,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
     open-in-view: false
+
+jwt:
+  secret: test-only-secret-please-do-not-use-in-production-must-be-32-bytes
+  expiration-seconds: 3600
