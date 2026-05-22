@@ -2,6 +2,7 @@ package com.ghost.server.domain.run.service;
 
 import com.ghost.server.common.exception.BusinessException;
 import com.ghost.server.common.exception.ErrorCode;
+import com.ghost.server.common.util.GeoUtils;
 import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.course.entity.Course;
 import com.ghost.server.domain.course.repository.CourseRepository;
@@ -17,6 +18,7 @@ import com.ghost.server.domain.run.dto.RunStopResponse;
 import com.ghost.server.domain.run.dto.TrackPointDto;
 import com.ghost.server.domain.run.entity.RunSession;
 import com.ghost.server.domain.run.entity.RunStatus;
+import com.ghost.server.domain.run.entity.TrackPoint;
 import com.ghost.server.domain.run.repository.RunSessionRepository;
 import com.ghost.server.domain.run.repository.TrackPointRepository;
 import com.ghost.server.domain.user.entity.User;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -102,23 +105,23 @@ public class RunSessionService {
             throw new BusinessException(ErrorCode.RUN_NOT_ACTIVE);
         }
 
-        run.complete(
-                request.endedAt(),
-                request.totalTime(),
-                request.distance(),
-                request.avgPace(),
-                request.calories()
-        );
+        LocalDateTime endedAt = LocalDateTime.now();
+        int totalTime = (int) Math.max(0, Duration.between(run.getStartedAt(), endedAt).getSeconds());
+        List<TrackPoint> points = trackPointRepository.findAllByRunSessionIdOrderByTAsc(run.getId());
+        int distance = computeDistance(points);
+        String avgPace = computeAvgPace(totalTime, distance);
+
+        run.complete(endedAt, totalTime, distance, avgPace, request.calories());
 
         Long courseId = run.getCourse().getId();
         boolean isNewRecord = runSessionRepository
                 .findFirstByCourseIdAndUserIdAndStatusAndIdNotOrderByTotalTimeAsc(
                         courseId, currentUserId, RunStatus.COMPLETED, run.getId())
-                .map(prev -> request.totalTime() < prev.getTotalTime())
+                .map(prev -> totalTime < prev.getTotalTime())
                 .orElse(true);
 
         long rank = runSessionRepository
-                .countByCourseIdAndStatusAndTotalTimeLessThan(courseId, RunStatus.COMPLETED, request.totalTime()) + 1;
+                .countByCourseIdAndStatusAndTotalTimeLessThan(courseId, RunStatus.COMPLETED, totalTime) + 1;
 
         return new RunStopResponse(
                 PublicIdCodec.encode(RUN_ID_PREFIX, run.getId()),
@@ -126,6 +129,33 @@ public class RunSessionService {
                 isNewRecord,
                 rank
         );
+    }
+
+    private static int computeDistance(List<TrackPoint> points) {
+        if (points.size() < 2) {
+            return 0;
+        }
+        double total = 0;
+        for (int i = 1; i < points.size(); i++) {
+            TrackPoint a = points.get(i - 1);
+            TrackPoint b = points.get(i);
+            total += GeoUtils.distanceMeters(a.getLat(), a.getLng(), b.getLat(), b.getLng());
+        }
+        return (int) Math.round(total);
+    }
+
+    private static String computeAvgPace(int totalTimeSec, int distanceMeters) {
+        if (distanceMeters <= 0 || totalTimeSec <= 0) {
+            return "00:00";
+        }
+        double secPerKm = totalTimeSec / (distanceMeters / 1000.0);
+        int min = (int) (secPerKm / 60);
+        int sec = (int) Math.round(secPerKm - min * 60.0);
+        if (sec == 60) {
+            min++;
+            sec = 0;
+        }
+        return String.format("%02d:%02d", min, sec);
     }
 
     public RunDetailResponse findById(String runIdParam) {
