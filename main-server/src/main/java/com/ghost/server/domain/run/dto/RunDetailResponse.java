@@ -10,6 +10,7 @@ import java.util.List;
 public record RunDetailResponse(
         @Schema(description = "러닝 세션 ID", example = "run_xyz789") String runId,
         @Schema(description = "세션 상태", example = "COMPLETED") RunStatus status,
+        @Schema(description = "기록 소유자") RunOwnerDto user,
         @Schema(description = "시작 시각") LocalDateTime startedAt,
         @Schema(description = "종료 시각 (미완료면 null)", nullable = true) LocalDateTime endedAt,
         @Schema(description = "총 시간 (초)", example = "762", nullable = true) Integer totalTime,
