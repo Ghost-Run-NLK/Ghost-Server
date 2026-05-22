@@ -237,11 +237,7 @@ PATCH /api/v1/runs/{runId}/stop
 **Request**
 ```json
 {
-  "endedAt":   "2026-05-09T07:42:42Z",
-  "totalTime":  762,
-  "distance":   3200,
-  "avgPace":   "06:32",
-  "calories":   312
+  "calories": 312
 }
 ```
 
@@ -255,7 +251,12 @@ PATCH /api/v1/runs/{runId}/stop
 }
 ```
 
-- trackPoints는 배치로 이미 수신 완료 → 요약 데이터만 수신
+- 클라는 서버가 알 수 없는 `calories`만 전송 (HRM/체중 등 클라 입력 의존)
+- 다음 값은 서버에서 계산해서 저장:
+  - `endedAt` = 서버 `now()`
+  - `totalTime` = `endedAt - startedAt` (초)
+  - `distance` = 수신된 trackPoints 누적 Haversine (m)
+  - `avgPace` = `totalTime / (distance / 1000)` → `MM:SS` 포맷 (distance 0이면 `"00:00"`)
 - 종료 즉시 리더보드 반영 후 순위 응답
 
 ---
