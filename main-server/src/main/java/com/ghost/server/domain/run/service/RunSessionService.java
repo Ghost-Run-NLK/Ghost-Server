@@ -9,6 +9,7 @@ import com.ghost.server.domain.run.dto.ActiveRunResponse;
 import com.ghost.server.domain.run.dto.GhostStartDto;
 import com.ghost.server.domain.run.dto.GhostSummaryDto;
 import com.ghost.server.domain.run.dto.RunDetailResponse;
+import com.ghost.server.domain.run.dto.RunOwnerDto;
 import com.ghost.server.domain.run.dto.RunStartRequest;
 import com.ghost.server.domain.run.dto.RunStartResponse;
 import com.ghost.server.domain.run.dto.RunStopRequest;
@@ -145,6 +146,7 @@ public class RunSessionService {
         return new RunDetailResponse(
                 PublicIdCodec.encode(RUN_ID_PREFIX, run.getId()),
                 run.getStatus(),
+                RunOwnerDto.from(run.getUser()),
                 run.getStartedAt(),
                 run.getEndedAt(),
                 run.getTotalTime(),
