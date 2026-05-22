@@ -122,7 +122,9 @@ public class RunController {
 
     @Operation(
             summary = "러닝 세션 종료",
-            description = "ACTIVE 세션을 COMPLETED로 전이하고 요약(시간/거리/페이스/칼로리)을 저장한다. 응답에 본인 순위와 신기록 여부 포함."
+            description = "ACTIVE 세션을 COMPLETED로 전이한다. endedAt/totalTime/distance/avgPace는 서버에서 계산 " +
+                    "(now, startedAt 차, trackPoints 누적 Haversine, totalTime/distance 파생). " +
+                    "요청 body에는 서버가 모르는 calories만 받는다. 응답에 본인 순위와 신기록 여부 포함."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
