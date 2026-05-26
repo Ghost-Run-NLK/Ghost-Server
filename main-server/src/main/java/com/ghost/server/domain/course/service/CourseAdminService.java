@@ -28,8 +28,6 @@ public class CourseAdminService {
                 .name(request.name())
                 .address(request.address())
                 .distance(request.distance())
-                .centerLat(request.centerLat())
-                .centerLng(request.centerLng())
                 .startLat(request.startLat())
                 .startLng(request.startLng())
                 .endLat(request.endLat())
@@ -48,8 +46,6 @@ public class CourseAdminService {
                 request.name(),
                 request.address(),
                 request.distance(),
-                request.centerLat(),
-                request.centerLng(),
                 request.startLat(),
                 request.startLng(),
                 request.endLat(),

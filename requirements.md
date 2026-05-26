@@ -76,8 +76,6 @@ GET /api/v1/courses
       "name": "성성호수 공원",
       "address": "천안시 서북구 천안대로 1223-24",
       "distance": 3500,
-      "centerLat": 36.8097,
-      "centerLng": 127.0079,
       "startLat": 36.8097,
       "startLng": 127.0079,
       "endLat":   36.8210,
@@ -93,7 +91,6 @@ GET /api/v1/courses
 ```
 
 - 화면이 각 코스 카드에 지도 라인을 그리므로 `routePoints` + 출발/도착 좌표를 함께 내려준다
-- `centerLat/centerLng`: 지도 썸네일 렌더링용 중심 좌표
 
 ---
 
@@ -289,7 +286,6 @@ Course
   - name
   - address
   - distance
-  - centerLat / centerLng   // 썸네일용
   - startLat / startLng
   - endLat / endLng
   - routePoints             // 경로 좌표 (관리자 설정)
