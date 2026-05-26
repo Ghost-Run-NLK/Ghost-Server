@@ -11,6 +11,6 @@ public record GhostStartDto(
         @Schema(description = "아바타 URL", example = "https://example.com/a.png", nullable = true) String avatarUrl,
         @Schema(description = "고스트 총 시간 (초)", example = "762") int totalTime,
         @Schema(description = "고스트 평균 페이스", example = "06:32") String avgPace,
-        @Schema(description = "고스트 위치 포인트 (t 오름차순)") List<TrackPointSimpleDto> trackPoints
+        @Schema(description = "고스트 위치 포인트 (elapsedSec 오름차순)") List<TrackPointSimpleDto> trackPoints
 ) {
 }
