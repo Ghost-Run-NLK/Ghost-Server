@@ -1,6 +1,9 @@
 package com.ghost.server.domain.run.controller;
 
+import com.ghost.server.common.exception.BusinessException;
+import com.ghost.server.common.exception.ErrorCode;
 import com.ghost.server.common.response.ApiResponse;
+import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.run.dto.LeaderboardResponse;
 import com.ghost.server.domain.run.service.LeaderboardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,10 +14,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Leaderboard", description = "코스 리더보드 API")
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/courses")
 public class LeaderboardController {
+
+    private static final String USER_ID_PREFIX = "user_";
 
     private final LeaderboardService leaderboardService;
 
@@ -50,8 +55,12 @@ public class LeaderboardController {
     public LeaderboardResponse leaderboard(
             @Parameter(description = "코스 ID", example = "course_1", required = true)
             @PathVariable String courseId,
-            @AuthenticationPrincipal Long currentUserId
+            @Parameter(description = "유저 ID (데모: 로그인 대신 쿼리로 전달, isMe 판단용)",
+                    example = "user_1", required = true)
+            @RequestParam("userId") String userId
     ) {
+        Long currentUserId = PublicIdCodec.decode(USER_ID_PREFIX, userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         return leaderboardService.find(courseId, currentUserId);
     }
 }

@@ -43,6 +43,7 @@
 ## MVP 제외 항목
 - 지역 필터링
 - 프로필 / 마이페이지
+- **로그인 (데모 단계 한정)** — `userId`를 쿼리 파라미터로 직접 전달 (`?userId=user_1`)
 
 ---
 
@@ -56,6 +57,10 @@
 - 방식: 배치 전송 (REST POST)
 - 배치 수신 시 서버에서 `elapsedSec` 기준 정렬 후 저장 (순서 역전 대응)
 - 중복 포인트 `elapsedSec` 기준으로 필터링 후 저장
+
+### 데모 모드 인증
+- 데모 단계에서는 로그인/JWT를 비활성화하고 클라가 매 호출마다 `userId`(예: `user_1`)를 쿼리 파라미터로 전달
+- 정식 로그인 도입 시 JWT 인증 활성화 + 컨트롤러에서 `@AuthenticationPrincipal`로 교체
 
 ---
 
@@ -136,7 +141,7 @@ GET /api/v1/courses/{courseId}
 ### 3. 리더보드 (고스트 선택 화면)
 
 ```
-GET /api/v1/courses/{courseId}/leaderboard
+GET /api/v1/courses/{courseId}/leaderboard?userId=user_1
 ```
 
 **Response**
@@ -171,7 +176,7 @@ GET /api/v1/courses/{courseId}/leaderboard
 ### 4. 러닝 세션 시작
 
 ```
-POST /api/v1/runs
+POST /api/v1/runs?userId=user_1
 ```
 
 **Request**
@@ -211,7 +216,7 @@ POST /api/v1/runs
 ### 5. 위치 배치 수신
 
 ```
-POST /api/v1/runs/{runId}/locations
+POST /api/v1/runs/{runId}/locations?userId=user_1
 ```
 
 **Request**
@@ -242,7 +247,7 @@ POST /api/v1/runs/{runId}/locations
 ### 6. 러닝 종료
 
 ```
-PATCH /api/v1/runs/{runId}/stop
+PATCH /api/v1/runs/{runId}/stop?userId=user_1
 ```
 
 **Request** — body 없음

@@ -1,6 +1,9 @@
 package com.ghost.server.domain.run.controller;
 
+import com.ghost.server.common.exception.BusinessException;
+import com.ghost.server.common.exception.ErrorCode;
 import com.ghost.server.common.response.ApiResponse;
+import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.run.dto.LocationBatchRequest;
 import com.ghost.server.domain.run.dto.LocationBatchResponse;
 import com.ghost.server.domain.run.dto.RunStartRequest;
@@ -17,12 +20,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Run", description = "러닝 세션 API")
@@ -31,8 +34,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/runs")
 public class RunController {
 
+    private static final String USER_ID_PREFIX = "user_";
+
     private final RunSessionService runSessionService;
     private final LocationBatchService locationBatchService;
+
+    private static Long decodeUserId(String userIdParam) {
+        return PublicIdCodec.decode(USER_ID_PREFIX, userIdParam)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
 
     @Operation(
             summary = "러닝 세션 시작",
@@ -92,10 +102,11 @@ public class RunController {
     })
     @PostMapping
     public RunStartResponse start(
-            @AuthenticationPrincipal Long currentUserId,
+            @Parameter(description = "유저 ID (데모: 로그인 대신 쿼리로 전달)", example = "user_1", required = true)
+            @RequestParam("userId") String userId,
             @Valid @RequestBody RunStartRequest request
     ) {
-        return runSessionService.start(currentUserId, request);
+        return runSessionService.start(decodeUserId(userId), request);
     }
 
     @Operation(
@@ -133,12 +144,13 @@ public class RunController {
     })
     @PostMapping("/{runId}/locations")
     public LocationBatchResponse receiveLocations(
-            @AuthenticationPrincipal Long currentUserId,
+            @Parameter(description = "유저 ID (데모: 로그인 대신 쿼리로 전달)", example = "user_1", required = true)
+            @RequestParam("userId") String userId,
             @Parameter(description = "러닝 세션 ID", example = "run_1", required = true)
             @PathVariable String runId,
             @Valid @RequestBody LocationBatchRequest request
     ) {
-        return locationBatchService.receive(currentUserId, runId, request);
+        return locationBatchService.receive(decodeUserId(userId), runId, request);
     }
 
     @Operation(
@@ -177,10 +189,11 @@ public class RunController {
     })
     @PatchMapping("/{runId}/stop")
     public RunStopResponse stop(
-            @AuthenticationPrincipal Long currentUserId,
+            @Parameter(description = "유저 ID (데모: 로그인 대신 쿼리로 전달)", example = "user_1", required = true)
+            @RequestParam("userId") String userId,
             @Parameter(description = "러닝 세션 ID", example = "run_1", required = true)
             @PathVariable String runId
     ) {
-        return runSessionService.stop(currentUserId, runId);
+        return runSessionService.stop(decodeUserId(userId), runId);
     }
 }
