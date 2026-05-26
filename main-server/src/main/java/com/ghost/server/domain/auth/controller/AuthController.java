@@ -4,6 +4,7 @@ import com.ghost.server.common.response.ApiResponse;
 import com.ghost.server.domain.auth.dto.LoginResponse;
 import com.ghost.server.domain.auth.dto.SocialLoginRequest;
 import com.ghost.server.domain.auth.service.AuthService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Auth", description = "소셜 로그인 API")
+@Hidden
+@Tag(name = "Auth", description = "소셜 로그인 API (데모 미사용)")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")

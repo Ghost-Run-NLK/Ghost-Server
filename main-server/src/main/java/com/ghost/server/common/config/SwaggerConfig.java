@@ -24,7 +24,7 @@ public class SwaggerConfig {
             - `GET /avatars/bear.png`
             - `GET /avatars/chicken.png`
 
-            예: `http://localhost:8080/avatars/bear.svg`. \
+            예: `http://localhost:8080/avatars/bear.png`. \
             DB `users.avatar_url`에 `/avatars/bear.png` 형태로 저장해두면 리더보드 응답의 \
             `entries[].avatarUrl`이 그 경로로 떨어지고, 프론트가 `<img src>`에 사용.
 

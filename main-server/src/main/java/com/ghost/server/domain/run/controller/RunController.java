@@ -58,12 +58,12 @@ public class RunController {
                                     name = "with-ghost",
                                     value = """
                                             {
-                                              "runId": "run_xyz789",
+                                              "runId": "run_2",
                                               "status": "ACTIVE",
                                               "ghost": {
-                                                "runId": "run_abc123",
+                                                "runId": "run_1",
                                                 "nickname": "달리기 장인",
-                                                "avatarUrl": "https://example.com/a.png",
+                                                "avatarUrl": "/avatars/bear.png",
                                                 "totalTime": 762,
                                                 "avgPace": "06:32",
                                                 "trackPoints": [

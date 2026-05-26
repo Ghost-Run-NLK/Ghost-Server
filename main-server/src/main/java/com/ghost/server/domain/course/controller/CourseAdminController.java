@@ -7,6 +7,7 @@ import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.course.dto.CourseDetailResponse;
 import com.ghost.server.domain.course.dto.CourseUpsertRequest;
 import com.ghost.server.domain.course.service.CourseAdminService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,7 +28,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 // TODO: Auth 도메인 구현 시 ADMIN 권한 가드 추가
-@Tag(name = "Course Admin", description = "코스 관리자 API (등록/수정/삭제)")
+@Hidden
+@Tag(name = "Course Admin", description = "코스 관리자 API (등록/수정/삭제, swagger 비노출)")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/courses")
