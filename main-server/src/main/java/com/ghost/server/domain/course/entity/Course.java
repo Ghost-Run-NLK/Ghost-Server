@@ -30,12 +30,6 @@ public class Course extends BaseEntity {
     @Column(nullable = false)
     private int distance;
 
-    @Column(name = "center_lat", nullable = false)
-    private double centerLat;
-
-    @Column(name = "center_lng", nullable = false)
-    private double centerLng;
-
     @Column(name = "start_lat", nullable = false)
     private double startLat;
 
@@ -54,14 +48,11 @@ public class Course extends BaseEntity {
 
     @Builder
     private Course(String name, String address, int distance,
-                   double centerLat, double centerLng,
                    double startLat, double startLng,
                    double endLat, double endLng) {
         this.name = name;
         this.address = address;
         this.distance = distance;
-        this.centerLat = centerLat;
-        this.centerLng = centerLng;
         this.startLat = startLat;
         this.startLng = startLng;
         this.endLat = endLat;
@@ -69,14 +60,11 @@ public class Course extends BaseEntity {
     }
 
     public void update(String name, String address, int distance,
-                       double centerLat, double centerLng,
                        double startLat, double startLng,
                        double endLat, double endLng) {
         this.name = name;
         this.address = address;
         this.distance = distance;
-        this.centerLat = centerLat;
-        this.centerLng = centerLng;
         this.startLat = startLat;
         this.startLng = startLng;
         this.endLat = endLat;

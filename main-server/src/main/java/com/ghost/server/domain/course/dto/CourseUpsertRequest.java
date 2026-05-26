@@ -19,11 +19,6 @@ public record CourseUpsertRequest(
         @Schema(description = "총 거리 (m)", example = "3500", requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull @PositiveOrZero Integer distance,
 
-        @Schema(description = "썸네일 중심 위도", example = "36.8097", requiredMode = Schema.RequiredMode.REQUIRED)
-        @NotNull Double centerLat,
-        @Schema(description = "썸네일 중심 경도", example = "127.0079", requiredMode = Schema.RequiredMode.REQUIRED)
-        @NotNull Double centerLng,
-
         @Schema(description = "출발지 위도", example = "36.8097", requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull Double startLat,
         @Schema(description = "출발지 경도", example = "127.0079", requiredMode = Schema.RequiredMode.REQUIRED)
