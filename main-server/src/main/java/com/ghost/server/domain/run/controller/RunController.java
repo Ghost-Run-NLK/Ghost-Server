@@ -76,12 +76,13 @@ public class RunController {
 
     @Operation(
             summary = "위치 배치 수신",
-            description = "ACTIVE 세션에 위치 포인트 배치를 저장한다. t 오름차순 정렬 + 중복 t 제거 후 신규만 INSERT."
+            description = "ACTIVE 세션에 위치 포인트 배치를 저장한다. elapsedSec 오름차순 정렬 + 중복 elapsedSec 제거 후 신규만 INSERT. " +
+                    "응답으로 현재까지 누적된 distance(m)와 avgPace(MM:SS/km)를 함께 반환."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "200",
-                    description = "수신 성공 (receivedCount = 실제 INSERT 수)"
+                    description = "수신 성공 (응답 = 누적 distance + 평균 페이스)"
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "404",

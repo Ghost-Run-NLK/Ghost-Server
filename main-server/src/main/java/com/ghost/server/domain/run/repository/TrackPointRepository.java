@@ -11,12 +11,12 @@ import java.util.Optional;
 
 public interface TrackPointRepository extends JpaRepository<TrackPoint, Long> {
 
-    @Query("select max(tp.t) from TrackPoint tp where tp.runSession.id = :runSessionId")
-    Optional<Integer> findMaxTByRunSessionId(@Param("runSessionId") Long runSessionId);
+    @Query("select max(tp.elapsedSec) from TrackPoint tp where tp.runSession.id = :runSessionId")
+    Optional<Integer> findMaxElapsedSecByRunSessionId(@Param("runSessionId") Long runSessionId);
 
-    List<TrackPoint> findAllByRunSessionIdOrderByTAsc(Long runSessionId);
+    List<TrackPoint> findAllByRunSessionIdOrderByElapsedSecAsc(Long runSessionId);
 
-    @Query("select tp.t from TrackPoint tp where tp.runSession.id = :runSessionId and tp.t in :ts")
-    List<Integer> findExistingTs(@Param("runSessionId") Long runSessionId,
-                                 @Param("ts") Collection<Integer> ts);
+    @Query("select tp.elapsedSec from TrackPoint tp where tp.runSession.id = :runSessionId and tp.elapsedSec in :elapsedSecs")
+    List<Integer> findExistingElapsedSecs(@Param("runSessionId") Long runSessionId,
+                                          @Param("elapsedSecs") Collection<Integer> elapsedSecs);
 }

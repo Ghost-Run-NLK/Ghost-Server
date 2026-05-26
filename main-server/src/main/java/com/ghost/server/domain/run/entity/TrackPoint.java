@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @Table(
         name = "track_points",
         uniqueConstraints = @UniqueConstraint(
-                name = "uk_track_run_t",
-                columnNames = {"run_session_id", "t"}
+                name = "uk_track_run_elapsed_sec",
+                columnNames = {"run_session_id", "elapsed_sec"}
         )
 )
 public class TrackPoint extends BaseEntity {
@@ -29,8 +29,8 @@ public class TrackPoint extends BaseEntity {
     @JoinColumn(name = "run_session_id", nullable = false)
     private RunSession runSession;
 
-    @Column(nullable = false)
-    private int t;
+    @Column(name = "elapsed_sec", nullable = false)
+    private int elapsedSec;
 
     @Column(nullable = false)
     private double lat;
@@ -38,15 +38,11 @@ public class TrackPoint extends BaseEntity {
     @Column(nullable = false)
     private double lng;
 
-    @Column(nullable = false)
-    private double speed;
-
     @Builder
-    private TrackPoint(RunSession runSession, int t, double lat, double lng, double speed) {
+    private TrackPoint(RunSession runSession, int elapsedSec, double lat, double lng) {
         this.runSession = runSession;
-        this.t = t;
+        this.elapsedSec = elapsedSec;
         this.lat = lat;
         this.lng = lng;
-        this.speed = speed;
     }
 }

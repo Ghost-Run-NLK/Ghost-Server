@@ -54,8 +54,8 @@
 
 ### 클라이언트 위치 수신
 - 방식: 배치 전송 (REST POST)
-- 배치 수신 시 서버에서 `t` 기준 정렬 후 저장 (순서 역전 대응)
-- 중복 포인트 `t` 기준으로 필터링 후 저장
+- 배치 수신 시 서버에서 `elapsedSec` 기준 정렬 후 저장 (순서 역전 대응)
+- 중복 포인트 `elapsedSec` 기준으로 필터링 후 저장
 
 ---
 
@@ -194,10 +194,10 @@ POST /api/v1/runs
     "totalTime": 762,
     "avgPace": "06:32",
     "trackPoints": [
-      { "t": 0,   "lat": 36.8097, "lng": 127.0079 },
-      { "t": 2,   "lat": 36.8098, "lng": 127.0080 },
+      { "elapsedSec": 0,   "lat": 36.8097, "lng": 127.0079 },
+      { "elapsedSec": 2,   "lat": 36.8098, "lng": 127.0080 },
       ...
-      { "t": 762, "lat": 36.8210, "lng": 127.0190 }
+      { "elapsedSec": 762, "lat": 36.8210, "lng": 127.0190 }
     ]
   }
 }
@@ -217,10 +217,10 @@ POST /api/v1/runs/{runId}/locations
 ```json
 {
   "points": [
-    { "t": 0,  "lat": 36.8097, "lng": 127.0079, "speed": 0.0 },
-    { "t": 2,  "lat": 36.8098, "lng": 127.0080, "speed": 2.8 },
+    { "elapsedSec": 0,  "lat": 36.8097, "lng": 127.0079 },
+    { "elapsedSec": 2,  "lat": 36.8098, "lng": 127.0080 },
     ...
-    { "t": 30, "lat": 36.8110, "lng": 127.0092, "speed": 2.7 }
+    { "elapsedSec": 30, "lat": 36.8110, "lng": 127.0092 }
   ]
 }
 ```
@@ -228,10 +228,13 @@ POST /api/v1/runs/{runId}/locations
 **Response**
 ```json
 {
-  "receivedCount": 15,
-  "lastReceivedT": 30
+  "distance": 3200,
+  "avgPace": "06:32"
 }
 ```
+
+- 응답은 현재까지 수신된 trackPoints 기준의 **누적 거리**(Haversine, m)와 **평균 페이스**(`MM:SS` / km)
+- `distance`가 0이면 `avgPace`는 `"00:00"`
 
 ---
 
@@ -317,8 +320,7 @@ RunSession
 TrackPoint
   - id
   - runId
-  - t                       // 경과 시간 (초)
+  - elapsedSec              // 러닝 시작 이후 경과 시간 (초)
   - lat
   - lng
-  - speed
 ```
