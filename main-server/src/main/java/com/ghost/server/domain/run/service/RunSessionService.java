@@ -5,7 +5,6 @@ import com.ghost.server.common.exception.ErrorCode;
 import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.course.entity.Course;
 import com.ghost.server.domain.course.repository.CourseRepository;
-import com.ghost.server.domain.run.dto.GhostStartDto;
 import com.ghost.server.domain.run.dto.RunStartRequest;
 import com.ghost.server.domain.run.dto.RunStartResponse;
 import com.ghost.server.domain.run.dto.RunStopResponse;
@@ -64,11 +63,10 @@ public class RunSessionService {
                         .build()
         );
 
-        GhostStartDto ghostDto = ghostRun != null ? ghostService.buildStartDto(ghostRun) : null;
         return new RunStartResponse(
                 PublicIdCodec.encode(RUN_ID_PREFIX, saved.getId()),
                 saved.getStatus(),
-                ghostDto
+                ghostService.buildStartDto(ghostRun)
         );
     }
 
@@ -117,9 +115,6 @@ public class RunSessionService {
     }
 
     private RunSession resolveGhost(String ghostRunIdParam, Long courseId) {
-        if (ghostRunIdParam == null || ghostRunIdParam.isBlank()) {
-            return null;
-        }
         Long ghostId = PublicIdCodec.decode(RUN_ID_PREFIX, ghostRunIdParam)
                 .orElseThrow(() -> new BusinessException(ErrorCode.GHOST_RUN_NOT_FOUND));
         RunSession ghost = runSessionRepository.findById(ghostId)
