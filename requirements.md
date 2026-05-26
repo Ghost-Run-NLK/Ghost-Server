@@ -203,6 +203,7 @@ POST /api/v1/runs
 }
 ```
 
+- `courseId`, `ghostRunId` 모두 필수 — 미지정 시 400
 - `ghost.trackPoints`: 클라이언트 고스트 위치 계산용으로 한 번에 전달
 
 ---

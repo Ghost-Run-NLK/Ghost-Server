@@ -36,12 +36,36 @@ public class RunController {
 
     @Operation(
             summary = "러닝 세션 시작",
-            description = "코스와 (선택적으로) 고스트를 지정해 ACTIVE 세션을 만든다. 고스트가 있으면 trackPoints 전체를 응답에 포함한다."
+            description = "코스와 고스트를 지정해 ACTIVE 세션을 만든다. 고스트의 trackPoints 전체를 응답에 포함한다."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "200",
-                    description = "세션 생성 성공"
+                    description = "세션 생성 성공",
+                    content = @Content(
+                            schema = @Schema(implementation = RunStartResponse.class),
+                            examples = @ExampleObject(
+                                    name = "with-ghost",
+                                    value = """
+                                            {
+                                              "runId": "run_xyz789",
+                                              "status": "ACTIVE",
+                                              "ghost": {
+                                                "runId": "run_abc123",
+                                                "nickname": "달리기 장인",
+                                                "avatarUrl": "https://example.com/a.png",
+                                                "totalTime": 762,
+                                                "avgPace": "06:32",
+                                                "trackPoints": [
+                                                  { "elapsedSec": 0,   "lat": 36.8097, "lng": 127.0079 },
+                                                  { "elapsedSec": 2,   "lat": 36.8098, "lng": 127.0080 },
+                                                  { "elapsedSec": 762, "lat": 36.8210, "lng": 127.0190 }
+                                                ]
+                                              }
+                                            }
+                                            """
+                            )
+                    )
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "404",

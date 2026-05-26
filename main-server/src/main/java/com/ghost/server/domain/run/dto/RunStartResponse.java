@@ -7,6 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record RunStartResponse(
         @Schema(description = "신규 러닝 세션 ID", example = "run_xyz789") String runId,
         @Schema(description = "세션 상태", example = "ACTIVE") RunStatus status,
-        @Schema(description = "고스트 정보 (선택 시), 없으면 null", nullable = true) GhostStartDto ghost
+        @Schema(description = "고스트 정보 (전체 trackPoints 포함)") GhostStartDto ghost
 ) {
 }
