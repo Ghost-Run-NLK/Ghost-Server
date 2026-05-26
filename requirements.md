@@ -76,10 +76,6 @@ GET /api/v1/courses
       "name": "성성호수 공원",
       "address": "천안시 서북구 천안대로 1223-24",
       "distance": 3500,
-      "startLat": 36.8097,
-      "startLng": 127.0079,
-      "endLat":   36.8210,
-      "endLng":   127.0190,
       "routePoints": [
         { "lat": 36.8097, "lng": 127.0079 },
         { "lat": 36.8098, "lng": 127.0080 },
@@ -90,7 +86,8 @@ GET /api/v1/courses
 }
 ```
 
-- 화면이 각 코스 카드에 지도 라인을 그리므로 `routePoints` + 출발/도착 좌표를 함께 내려준다
+- 화면이 각 코스 카드에 지도 라인을 그리므로 `routePoints` 좌표 배열을 함께 내려준다
+- 출발/도착 좌표는 상세 조회(`GET /api/v1/courses/{courseId}`)에서만 제공
 
 ---
 
