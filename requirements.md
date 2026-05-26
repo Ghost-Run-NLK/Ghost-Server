@@ -57,10 +57,6 @@
 - 배치 수신 시 서버에서 `t` 기준 정렬 후 저장 (순서 역전 대응)
 - 중복 포인트 `t` 기준으로 필터링 후 저장
 
-### 칼로리
-- 클라이언트에서 계산 후 전송
-- 서버는 최종 결과값만 저장
-
 ---
 
 ## API 명세
@@ -234,12 +230,7 @@ POST /api/v1/runs/{runId}/locations
 PATCH /api/v1/runs/{runId}/stop
 ```
 
-**Request**
-```json
-{
-  "calories": 312
-}
-```
+**Request** — body 없음
 
 **Response**
 ```json
@@ -251,7 +242,6 @@ PATCH /api/v1/runs/{runId}/stop
 }
 ```
 
-- 클라는 서버가 알 수 없는 `calories`만 전송 (HRM/체중 등 클라 입력 의존)
 - 다음 값은 서버에서 계산해서 저장:
   - `endedAt` = 서버 `now()`
   - `totalTime` = `endedAt - startedAt` (초)
@@ -297,7 +287,6 @@ GET /api/v1/runs/{runId}
   "totalTime":  762,
   "distance":   3200,
   "avgPace":   "06:32",
-  "calories":   312,
   "ghost": {
     "runId": "run_abc123",
     "nickname": "달리기 장인",
@@ -369,7 +358,6 @@ RunSession
   - totalTime
   - distance
   - avgPace
-  - calories
 
 TrackPoint
   - id
