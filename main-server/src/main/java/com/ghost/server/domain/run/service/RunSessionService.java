@@ -13,7 +13,6 @@ import com.ghost.server.domain.run.dto.RunDetailResponse;
 import com.ghost.server.domain.run.dto.RunOwnerDto;
 import com.ghost.server.domain.run.dto.RunStartRequest;
 import com.ghost.server.domain.run.dto.RunStartResponse;
-import com.ghost.server.domain.run.dto.RunStopRequest;
 import com.ghost.server.domain.run.dto.RunStopResponse;
 import com.ghost.server.domain.run.dto.TrackPointDto;
 import com.ghost.server.domain.run.entity.RunSession;
@@ -92,7 +91,7 @@ public class RunSessionService {
     }
 
     @Transactional
-    public RunStopResponse stop(Long currentUserId, String runIdParam, RunStopRequest request) {
+    public RunStopResponse stop(Long currentUserId, String runIdParam) {
         Long runId = PublicIdCodec.decode(RUN_ID_PREFIX, runIdParam)
                 .orElseThrow(() -> new BusinessException(ErrorCode.RUN_NOT_FOUND));
         RunSession run = runSessionRepository.findById(runId)
@@ -111,7 +110,7 @@ public class RunSessionService {
         int distance = computeDistance(points);
         String avgPace = computeAvgPace(totalTime, distance);
 
-        run.complete(endedAt, totalTime, distance, avgPace, request.calories());
+        run.complete(endedAt, totalTime, distance, avgPace);
 
         Long courseId = run.getCourse().getId();
         boolean isNewRecord = runSessionRepository
@@ -182,7 +181,6 @@ public class RunSessionService {
                 run.getTotalTime(),
                 run.getDistance(),
                 run.getAvgPace(),
-                run.getCalories(),
                 ghost,
                 trackPoints
         );

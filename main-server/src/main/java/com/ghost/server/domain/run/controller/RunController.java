@@ -7,7 +7,6 @@ import com.ghost.server.domain.run.dto.LocationBatchResponse;
 import com.ghost.server.domain.run.dto.RunDetailResponse;
 import com.ghost.server.domain.run.dto.RunStartRequest;
 import com.ghost.server.domain.run.dto.RunStartResponse;
-import com.ghost.server.domain.run.dto.RunStopRequest;
 import com.ghost.server.domain.run.dto.RunStopResponse;
 import com.ghost.server.domain.run.service.LocationBatchService;
 import com.ghost.server.domain.run.service.RunSessionService;
@@ -124,7 +123,7 @@ public class RunController {
             summary = "러닝 세션 종료",
             description = "ACTIVE 세션을 COMPLETED로 전이한다. endedAt/totalTime/distance/avgPace는 서버에서 계산 " +
                     "(now, startedAt 차, trackPoints 누적 Haversine, totalTime/distance 파생). " +
-                    "요청 body에는 서버가 모르는 calories만 받는다. 응답에 본인 순위와 신기록 여부 포함."
+                    "요청 body 없음. 응답에 본인 순위와 신기록 여부 포함."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -158,10 +157,9 @@ public class RunController {
     public RunStopResponse stop(
             @AuthenticationPrincipal Long currentUserId,
             @Parameter(description = "러닝 세션 ID", example = "run_1", required = true)
-            @PathVariable String runId,
-            @Valid @RequestBody RunStopRequest request
+            @PathVariable String runId
     ) {
-        return runSessionService.stop(currentUserId, runId, request);
+        return runSessionService.stop(currentUserId, runId);
     }
 
     @Operation(

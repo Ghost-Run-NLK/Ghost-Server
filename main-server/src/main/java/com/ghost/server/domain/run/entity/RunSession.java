@@ -65,8 +65,6 @@ public class RunSession extends BaseEntity {
     @Column(name = "avg_pace", length = 8)
     private String avgPace;
 
-    private Integer calories;
-
     @OneToMany(mappedBy = "runSession", cascade = CascadeType.ALL)
     private List<TrackPoint> trackPoints = new ArrayList<>();
 
@@ -83,13 +81,11 @@ public class RunSession extends BaseEntity {
     public void complete(LocalDateTime endedAt,
                          int totalTime,
                          int distance,
-                         String avgPace,
-                         int calories) {
+                         String avgPace) {
         this.status = RunStatus.COMPLETED;
         this.endedAt = endedAt;
         this.totalTime = totalTime;
         this.distance = distance;
         this.avgPace = avgPace;
-        this.calories = calories;
     }
 }

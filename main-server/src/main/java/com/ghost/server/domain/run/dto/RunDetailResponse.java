@@ -16,7 +16,6 @@ public record RunDetailResponse(
         @Schema(description = "총 시간 (초)", example = "762", nullable = true) Integer totalTime,
         @Schema(description = "총 거리 (m)", example = "3200", nullable = true) Integer distance,
         @Schema(description = "평균 페이스", example = "06:32", nullable = true) String avgPace,
-        @Schema(description = "칼로리", example = "312", nullable = true) Integer calories,
         @Schema(description = "고스트 정보 (없으면 null)", nullable = true) GhostSummaryDto ghost,
         @Schema(description = "위치 포인트 (t 오름차순)") List<TrackPointDto> trackPoints
 ) {
