@@ -21,11 +21,11 @@ public class SwaggerConfig {
             프로필 이미지는 Spring Boot 정적 리소스로 서빙됩니다. \
             컨트롤러가 아니라 Swagger 목록에는 안 잡히지만, 아래 URL로 직접 접근 가능:
 
-            - `GET /avatars/user_1.svg`
-            - `GET /avatars/user_2.svg`
+            - `GET /avatars/bear.png`
+            - `GET /avatars/chicken.png`
 
-            예: `http://localhost:8080/avatars/user_1.svg`. \
-            DB `users.avatar_url`에 `/avatars/user_1.svg` 형태로 저장해두면 리더보드 응답의 \
+            예: `http://localhost:8080/avatars/bear.svg`. \
+            DB `users.avatar_url`에 `/avatars/bear.png` 형태로 저장해두면 리더보드 응답의 \
             `entries[].avatarUrl`이 그 경로로 떨어지고, 프론트가 `<img src>`에 사용.
 
             ### 데모 모드 인증

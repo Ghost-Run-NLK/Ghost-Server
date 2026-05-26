@@ -13,8 +13,8 @@
 ```sql
 INSERT INTO users (social_provider, social_id, nickname, avatar_url, created_at, updated_at)
 VALUES
-  ('KAKAO', 'demo-1', '데모유저1', '/avatars/user_1.svg', NOW(), NOW()),
-  ('KAKAO', 'demo-2', '데모유저2', '/avatars/user_2.svg', NOW(), NOW());
+  ('KAKAO', 'demo-1', '데모유저1', '/avatars/bear.png',    NOW(), NOW()),
+  ('KAKAO', 'demo-2', '데모유저2', '/avatars/chicken.png', NOW(), NOW());
 ```
 
 - 삽입된 row의 PK가 1, 2면 호출 시 `userId=user_1`, `userId=user_2`로 사용
@@ -24,7 +24,7 @@ VALUES
 
 `main-server/src/main/resources/static/avatars/` 안의 파일은 Spring Boot가 자동으로 정적 리소스로 서빙합니다.
 
-- 접근 URL: `http://<host>:8080/avatars/user_1.svg` (또는 `user_2.svg`)
+- 접근 URL: `http://<host>:8080/avatars/bear.png` (또는 `chicken.png`)
 - 이미지 교체/추가는 같은 폴더에 파일을 넣고 서버를 재시작
 - 운영 단계에선 S3 같은 외부 스토리지로 이관 권장 (jar에 묶이지 않게)
 
