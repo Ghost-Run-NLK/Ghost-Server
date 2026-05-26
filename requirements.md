@@ -251,58 +251,6 @@ PATCH /api/v1/runs/{runId}/stop
 
 ---
 
-### 7. 진행 중인 세션 조회
-
-```
-GET /api/v1/runs/active
-```
-
-**Response**
-```json
-{
-  "runId": "run_xyz789",
-  "status": "ACTIVE",
-  "startedAt": "2026-05-09T07:30:00Z",
-  "lastReceivedT": 120
-}
-```
-
-- ACTIVE 세션 없으면 `null` 반환
-
----
-
-### 8. 러닝 기록 상세 조회
-
-```
-GET /api/v1/runs/{runId}
-```
-
-**Response**
-```json
-{
-  "runId": "run_xyz789",
-  "status": "COMPLETED",
-  "startedAt": "2026-05-09T07:30:00Z",
-  "endedAt":   "2026-05-09T07:42:42Z",
-  "totalTime":  762,
-  "distance":   3200,
-  "avgPace":   "06:32",
-  "ghost": {
-    "runId": "run_abc123",
-    "nickname": "달리기 장인",
-    "timeDiff": -18
-  },
-  "trackPoints": [
-    { "t": 0,  "lat": 36.8097, "lng": 127.0079, "speed": 0.0 },
-    ...
-  ]
-}
-```
-
-- `ghost.timeDiff`: 고스트 대비 시간 차이 (음수 = 내가 빠름)
-
----
-
 ## 전체 플로우
 
 ```
@@ -321,9 +269,6 @@ POST /runs/{id}/locations  (배치)
         ↓
 [러닝 종료]
 PATCH /runs/{id}/stop  →  요약 데이터 + 순위 결과
-        ↓
-[기록 조회]
-GET /runs/{id}
 ```
 
 ---

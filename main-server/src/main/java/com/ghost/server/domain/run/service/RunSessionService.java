@@ -6,15 +6,10 @@ import com.ghost.server.common.util.GeoUtils;
 import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.course.entity.Course;
 import com.ghost.server.domain.course.repository.CourseRepository;
-import com.ghost.server.domain.run.dto.ActiveRunResponse;
 import com.ghost.server.domain.run.dto.GhostStartDto;
-import com.ghost.server.domain.run.dto.GhostSummaryDto;
-import com.ghost.server.domain.run.dto.RunDetailResponse;
-import com.ghost.server.domain.run.dto.RunOwnerDto;
 import com.ghost.server.domain.run.dto.RunStartRequest;
 import com.ghost.server.domain.run.dto.RunStartResponse;
 import com.ghost.server.domain.run.dto.RunStopResponse;
-import com.ghost.server.domain.run.dto.TrackPointDto;
 import com.ghost.server.domain.run.entity.RunSession;
 import com.ghost.server.domain.run.entity.RunStatus;
 import com.ghost.server.domain.run.entity.TrackPoint;
@@ -76,18 +71,6 @@ public class RunSessionService {
                 saved.getStatus(),
                 ghostDto
         );
-    }
-
-    public ActiveRunResponse findActive(Long currentUserId) {
-        return runSessionRepository
-                .findFirstByUserIdAndStatus(currentUserId, RunStatus.ACTIVE)
-                .map(run -> new ActiveRunResponse(
-                        PublicIdCodec.encode(RUN_ID_PREFIX, run.getId()),
-                        run.getStatus(),
-                        run.getStartedAt(),
-                        trackPointRepository.findMaxTByRunSessionId(run.getId()).orElse(0)
-                ))
-                .orElse(null);
     }
 
     @Transactional
@@ -155,35 +138,6 @@ public class RunSessionService {
             sec = 0;
         }
         return String.format("%02d:%02d", min, sec);
-    }
-
-    public RunDetailResponse findById(String runIdParam) {
-        Long runId = PublicIdCodec.decode(RUN_ID_PREFIX, runIdParam)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RUN_NOT_FOUND));
-        RunSession run = runSessionRepository.findById(runId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RUN_NOT_FOUND));
-
-        List<TrackPointDto> trackPoints = trackPointRepository
-                .findAllByRunSessionIdOrderByTAsc(run.getId()).stream()
-                .map(TrackPointDto::from)
-                .toList();
-
-        GhostSummaryDto ghost = run.getGhostRun() != null
-                ? ghostService.buildSummary(run, run.getGhostRun())
-                : null;
-
-        return new RunDetailResponse(
-                PublicIdCodec.encode(RUN_ID_PREFIX, run.getId()),
-                run.getStatus(),
-                RunOwnerDto.from(run.getUser()),
-                run.getStartedAt(),
-                run.getEndedAt(),
-                run.getTotalTime(),
-                run.getDistance(),
-                run.getAvgPace(),
-                ghost,
-                trackPoints
-        );
     }
 
     public boolean existsForCourse(Long courseId) {
