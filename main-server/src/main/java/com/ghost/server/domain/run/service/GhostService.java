@@ -2,7 +2,6 @@ package com.ghost.server.domain.run.service;
 
 import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.run.dto.GhostStartDto;
-import com.ghost.server.domain.run.dto.GhostSummaryDto;
 import com.ghost.server.domain.run.dto.TrackPointSimpleDto;
 import com.ghost.server.domain.run.entity.RunSession;
 import com.ghost.server.domain.run.repository.TrackPointRepository;
@@ -35,17 +34,6 @@ public class GhostService {
                 ghostRun.getTotalTime(),
                 ghostRun.getAvgPace(),
                 points
-        );
-    }
-
-    public GhostSummaryDto buildSummary(RunSession myRun, RunSession ghostRun) {
-        Integer timeDiff = (myRun.getTotalTime() != null && ghostRun.getTotalTime() != null)
-                ? myRun.getTotalTime() - ghostRun.getTotalTime()
-                : null;
-        return new GhostSummaryDto(
-                PublicIdCodec.encode(RUN_ID_PREFIX, ghostRun.getId()),
-                ghostRun.getUser().getNickname(),
-                timeDiff
         );
     }
 }
