@@ -68,7 +68,6 @@ public class LocationBatchService {
                         .elapsedSec(p.elapsedSec())
                         .lat(p.lat())
                         .lng(p.lng())
-                        .speed(p.speed())
                         .build())
                 .toList();
 

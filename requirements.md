@@ -217,10 +217,10 @@ POST /api/v1/runs/{runId}/locations
 ```json
 {
   "points": [
-    { "elapsedSec": 0,  "lat": 36.8097, "lng": 127.0079, "speed": 0.0 },
-    { "elapsedSec": 2,  "lat": 36.8098, "lng": 127.0080, "speed": 2.8 },
+    { "elapsedSec": 0,  "lat": 36.8097, "lng": 127.0079 },
+    { "elapsedSec": 2,  "lat": 36.8098, "lng": 127.0080 },
     ...
-    { "elapsedSec": 30, "lat": 36.8110, "lng": 127.0092, "speed": 2.7 }
+    { "elapsedSec": 30, "lat": 36.8110, "lng": 127.0092 }
   ]
 }
 ```
@@ -320,5 +320,4 @@ TrackPoint
   - elapsedSec              // 러닝 시작 이후 경과 시간 (초)
   - lat
   - lng
-  - speed
 ```

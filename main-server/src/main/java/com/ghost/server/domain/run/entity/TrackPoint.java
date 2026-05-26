@@ -38,15 +38,11 @@ public class TrackPoint extends BaseEntity {
     @Column(nullable = false)
     private double lng;
 
-    @Column(nullable = false)
-    private double speed;
-
     @Builder
-    private TrackPoint(RunSession runSession, int elapsedSec, double lat, double lng, double speed) {
+    private TrackPoint(RunSession runSession, int elapsedSec, double lat, double lng) {
         this.runSession = runSession;
         this.elapsedSec = elapsedSec;
         this.lat = lat;
         this.lng = lng;
-        this.speed = speed;
     }
 }
