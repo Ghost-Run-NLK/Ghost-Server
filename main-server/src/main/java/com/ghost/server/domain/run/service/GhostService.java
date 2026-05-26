@@ -24,7 +24,7 @@ public class GhostService {
     public GhostStartDto buildStartDto(RunSession ghostRun) {
         User user = ghostRun.getUser();
         List<TrackPointSimpleDto> points = trackPointRepository
-                .findAllByRunSessionIdOrderByTAsc(ghostRun.getId()).stream()
+                .findAllByRunSessionIdOrderByElapsedSecAsc(ghostRun.getId()).stream()
                 .map(TrackPointSimpleDto::from)
                 .toList();
         return new GhostStartDto(

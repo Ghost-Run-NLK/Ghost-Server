@@ -89,7 +89,7 @@ public class RunSessionService {
 
         LocalDateTime endedAt = LocalDateTime.now();
         int totalTime = (int) Math.max(0, Duration.between(run.getStartedAt(), endedAt).getSeconds());
-        List<TrackPoint> points = trackPointRepository.findAllByRunSessionIdOrderByTAsc(run.getId());
+        List<TrackPoint> points = trackPointRepository.findAllByRunSessionIdOrderByElapsedSecAsc(run.getId());
         int distance = computeDistance(points);
         String avgPace = computeAvgPace(totalTime, distance);
 
