@@ -2,7 +2,6 @@ package com.ghost.server.domain.run.service;
 
 import com.ghost.server.common.exception.BusinessException;
 import com.ghost.server.common.exception.ErrorCode;
-import com.ghost.server.common.util.GeoUtils;
 import com.ghost.server.common.util.PublicIdCodec;
 import com.ghost.server.domain.course.entity.Course;
 import com.ghost.server.domain.course.repository.CourseRepository;
@@ -90,8 +89,8 @@ public class RunSessionService {
         LocalDateTime endedAt = LocalDateTime.now();
         int totalTime = (int) Math.max(0, Duration.between(run.getStartedAt(), endedAt).getSeconds());
         List<TrackPoint> points = trackPointRepository.findAllByRunSessionIdOrderByElapsedSecAsc(run.getId());
-        int distance = computeDistance(points);
-        String avgPace = computeAvgPace(totalTime, distance);
+        int distance = RunMetrics.distanceMeters(points);
+        String avgPace = RunMetrics.avgPace(totalTime, distance);
 
         run.complete(endedAt, totalTime, distance, avgPace);
 
@@ -111,33 +110,6 @@ public class RunSessionService {
                 isNewRecord,
                 rank
         );
-    }
-
-    private static int computeDistance(List<TrackPoint> points) {
-        if (points.size() < 2) {
-            return 0;
-        }
-        double total = 0;
-        for (int i = 1; i < points.size(); i++) {
-            TrackPoint a = points.get(i - 1);
-            TrackPoint b = points.get(i);
-            total += GeoUtils.distanceMeters(a.getLat(), a.getLng(), b.getLat(), b.getLng());
-        }
-        return (int) Math.round(total);
-    }
-
-    private static String computeAvgPace(int totalTimeSec, int distanceMeters) {
-        if (distanceMeters <= 0 || totalTimeSec <= 0) {
-            return "00:00";
-        }
-        double secPerKm = totalTimeSec / (distanceMeters / 1000.0);
-        int min = (int) (secPerKm / 60);
-        int sec = (int) Math.round(secPerKm - min * 60.0);
-        if (sec == 60) {
-            min++;
-            sec = 0;
-        }
-        return String.format("%02d:%02d", min, sec);
     }
 
     public boolean existsForCourse(Long courseId) {

@@ -228,10 +228,13 @@ POST /api/v1/runs/{runId}/locations
 **Response**
 ```json
 {
-  "receivedCount": 15,
-  "lastReceivedT": 30
+  "distance": 3200,
+  "avgPace": "06:32"
 }
 ```
+
+- 응답은 현재까지 수신된 trackPoints 기준의 **누적 거리**(Haversine, m)와 **평균 페이스**(`MM:SS` / km)
+- `distance`가 0이면 `avgPace`는 `"00:00"`
 
 ---
 

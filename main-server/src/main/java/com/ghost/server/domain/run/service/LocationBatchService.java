@@ -52,28 +52,30 @@ public class LocationBatchService {
                         (m, p) -> m.putIfAbsent(p.elapsedSec(), p),
                         LinkedHashMap::putAll);
 
-        if (sortedUnique.isEmpty()) {
-            int last = trackPointRepository.findMaxElapsedSecByRunSessionId(run.getId()).orElse(0);
-            return new LocationBatchResponse(0, last);
+        // 2) DB 기존 elapsedSec 조회해서 제외 후 신규만 저장
+        if (!sortedUnique.isEmpty()) {
+            Set<Integer> existing = new HashSet<>(
+                    trackPointRepository.findExistingElapsedSecs(run.getId(), sortedUnique.keySet()));
+
+            List<TrackPoint> toSave = sortedUnique.values().stream()
+                    .filter(p -> !existing.contains(p.elapsedSec()))
+                    .map(p -> TrackPoint.builder()
+                            .runSession(run)
+                            .elapsedSec(p.elapsedSec())
+                            .lat(p.lat())
+                            .lng(p.lng())
+                            .build())
+                    .toList();
+
+            trackPointRepository.saveAll(toSave);
         }
 
-        // 2) DB 기존 elapsedSec 조회해서 제외
-        Set<Integer> existing = new HashSet<>(
-                trackPointRepository.findExistingElapsedSecs(run.getId(), sortedUnique.keySet()));
+        // 3) 누적 distance + avgPace 응답
+        List<TrackPoint> allPoints = trackPointRepository.findAllByRunSessionIdOrderByElapsedSecAsc(run.getId());
+        int distance = RunMetrics.distanceMeters(allPoints);
+        int totalTime = allPoints.isEmpty() ? 0 : allPoints.get(allPoints.size() - 1).getElapsedSec();
+        String avgPace = RunMetrics.avgPace(totalTime, distance);
 
-        List<TrackPoint> toSave = sortedUnique.values().stream()
-                .filter(p -> !existing.contains(p.elapsedSec()))
-                .map(p -> TrackPoint.builder()
-                        .runSession(run)
-                        .elapsedSec(p.elapsedSec())
-                        .lat(p.lat())
-                        .lng(p.lng())
-                        .build())
-                .toList();
-
-        trackPointRepository.saveAll(toSave);
-
-        int lastReceivedSec = trackPointRepository.findMaxElapsedSecByRunSessionId(run.getId()).orElse(0);
-        return new LocationBatchResponse(toSave.size(), lastReceivedSec);
+        return new LocationBatchResponse(distance, avgPace);
     }
 }
