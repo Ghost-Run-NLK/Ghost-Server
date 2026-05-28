@@ -3,3 +3,10 @@ spring:
     name: main-server
   profiles:
     default: local
+
+ghost:
+  run:
+    # 마지막 위치 배치 이후 이 시간(초) 이상 idle 한 ACTIVE 런은 스케줄러가 ABANDONED 처리
+    idle-threshold-seconds: 30
+    # idle 스캔 주기(초)
+    scan-interval-seconds: 5
