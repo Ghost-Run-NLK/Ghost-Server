@@ -49,7 +49,10 @@ public class RunSessionService {
 
         LocalDateTime now = LocalDateTime.now();
         runSessionRepository.findByUserIdAndStatus(user.getId(), RunStatus.ACTIVE)
-                .ifPresent(active -> active.abandon(now));
+                .ifPresent(active -> {
+                    active.abandon(now);
+                    trackPointRepository.deleteAllByRunSessionId(active.getId());
+                });
 
         RunSession ghostRun = resolveGhost(request.ghostRunId(), course.getId());
 
