@@ -135,7 +135,7 @@ Class PascalCase / method·variable camelCase / 상수 UPPER_SNAKE_CASE / 테이
 자세한 흐름·필드는 requirements.md.
 
 - **러닝 라이프사이클**: `POST /runs` → `POST /runs/{id}/locations` (반복) → `PATCH /runs/{id}/stop`
-- **유저당 ACTIVE 1개** 정책 — service에서 강제 (`existsByUserIdAndStatus`)
+- **유저당 ACTIVE 1개** 정책 — start 시 기존 ACTIVE 를 ABANDONED 로 자동 폐기 (`findByUserIdAndStatus` + `RunSession.abandon`)
 - **위치 배치 dedup**: 요청 내부 t 중복 제거 + DB 기존 t 조회로 추가 dedup. `uk_track_run_t` unique 제약이 race condition 백업
 - **고스트 데이터**: 시작 시 ghost trackPoints 전체를 한 번에 응답 (서버 실시간 통신 없음)
 - **리더보드**: COMPLETED top 10, `totalTime ASC, endedAt ASC` (동률은 먼저 완주한 사람). `idx_run_leaderboard` 활용
@@ -144,7 +144,7 @@ Class PascalCase / method·variable camelCase / 상수 UPPER_SNAKE_CASE / 테이
 - **푸시 알림**: 인터페이스/이벤트 아무것도 없음. 알림 도메인 도입 시 한 번에
 
 ### 주요 상태값
-`RunSession.status`: `ACTIVE | COMPLETED`
+`RunSession.status`: `ACTIVE | COMPLETED | ABANDONED`
 
 ### 소셜 로그인
 현재 `KakaoAuthClient` / `AppleAuthClient` 는 **stub** — 받은 token을 그대로 socialId로 사용. 실 OAuth 연동은 후속 PR.
