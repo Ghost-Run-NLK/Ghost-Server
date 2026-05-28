@@ -88,4 +88,9 @@ public class RunSession extends BaseEntity {
         this.distance = distance;
         this.avgPace = avgPace;
     }
+
+    public void abandon(LocalDateTime endedAt) {
+        this.status = RunStatus.ABANDONED;
+        this.endedAt = endedAt;
+    }
 }
