@@ -60,6 +60,7 @@ public class RunSessionService {
                         .ghostRun(ghostRun)
                         .status(RunStatus.ACTIVE)
                         .startedAt(now)
+                        .lastLocationAt(now)
                         .build()
         );
 
