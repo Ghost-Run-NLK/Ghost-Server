@@ -135,7 +135,7 @@ Class PascalCase / method·variable camelCase / 상수 UPPER_SNAKE_CASE / 테이
 자세한 흐름·필드는 requirements.md.
 
 - **러닝 라이프사이클**: `POST /runs` → `POST /runs/{id}/locations` (반복) → `PATCH /runs/{id}/stop`
-- **유저당 ACTIVE 1개** 정책 — start 시 기존 ACTIVE 를 ABANDONED 로 자동 폐기 (`findByUserIdAndStatus` + `RunSession.abandon`)
+- **유저당 ACTIVE 1개** 정책 — start 시 기존 ACTIVE 를 ABANDONED 로 자동 폐기 (`findByUserIdAndStatus` + `RunSession.abandon`) + 30초 idle 시 `RunSessionAbandonScheduler` 가 ABANDONED
 - **위치 배치 dedup**: 요청 내부 t 중복 제거 + DB 기존 t 조회로 추가 dedup. `uk_track_run_t` unique 제약이 race condition 백업
 - **고스트 데이터**: 시작 시 ghost trackPoints 전체를 한 번에 응답 (서버 실시간 통신 없음)
 - **리더보드**: COMPLETED top 10, `totalTime ASC, endedAt ASC` (동률은 먼저 완주한 사람). `idx_run_leaderboard` 활용

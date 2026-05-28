@@ -210,7 +210,7 @@ POST /api/v1/runs?userId=user_1
 
 - `courseId`, `ghostRunId` 모두 필수 — 미지정 시 400
 - `ghost.trackPoints`: 클라이언트 고스트 위치 계산용으로 한 번에 전달
-- 동일 유저에 ACTIVE 런이 있으면 자동으로 ABANDONED 처리 후 새 ACTIVE 런 생성 (정책: 유저당 ACTIVE 1개)
+- 동일 유저에 ACTIVE 런이 있으면 자동으로 ABANDONED 처리 후 새 ACTIVE 런 생성. 또한 위치 배치가 30초 이상 끊기면 스케줄러가 ABANDONED 처리 (정책: 유저당 ACTIVE 1개)
 
 ---
 
