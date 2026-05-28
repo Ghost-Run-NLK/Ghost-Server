@@ -87,17 +87,6 @@ public class RunController {
                                     value = "{\"code\": 404, \"message\": \"코스를 찾을 수 없습니다\", \"data\": null}"
                             )
                     )
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "409",
-                    description = "이미 진행 중인 세션 존재",
-                    content = @Content(
-                            schema = @Schema(implementation = ApiResponse.class),
-                            examples = @ExampleObject(
-                                    name = "RUN_ALREADY_ACTIVE",
-                                    value = "{\"code\": 409, \"message\": \"이미 진행 중인 러닝 세션이 있습니다\", \"data\": null}"
-                            )
-                    )
             )
     })
     @PostMapping
