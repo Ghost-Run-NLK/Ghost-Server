@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface RunSessionRepository extends JpaRepository<RunSession, Long> {
 
-    boolean existsByUserIdAndStatus(Long userId, RunStatus status);
+    Optional<RunSession> findByUserIdAndStatus(Long userId, RunStatus status);
 
     boolean existsByCourseId(Long courseId);
 

@@ -47,9 +47,9 @@ public class RunSessionService {
         Course course = courseRepository.findById(courseIdValue)
                 .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
 
-        if (runSessionRepository.existsByUserIdAndStatus(user.getId(), RunStatus.ACTIVE)) {
-            throw new BusinessException(ErrorCode.RUN_ALREADY_ACTIVE);
-        }
+        LocalDateTime now = LocalDateTime.now();
+        runSessionRepository.findByUserIdAndStatus(user.getId(), RunStatus.ACTIVE)
+                .ifPresent(active -> active.abandon(now));
 
         RunSession ghostRun = resolveGhost(request.ghostRunId(), course.getId());
 
@@ -59,7 +59,7 @@ public class RunSessionService {
                         .course(course)
                         .ghostRun(ghostRun)
                         .status(RunStatus.ACTIVE)
-                        .startedAt(LocalDateTime.now())
+                        .startedAt(now)
                         .build()
         );
 
