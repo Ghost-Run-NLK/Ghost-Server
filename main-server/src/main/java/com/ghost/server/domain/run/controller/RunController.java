@@ -47,7 +47,8 @@ public class RunController {
     @Operation(
             summary = "러닝 세션 시작",
             description = "코스와 고스트를 지정해 ACTIVE 세션을 만든다. 고스트의 trackPoints 전체를 응답에 포함한다. " +
-                          "동일 유저에 ACTIVE 런이 있으면 자동으로 ABANDONED 처리 후 새 ACTIVE 런을 생성한다 (유저당 ACTIVE 1개 정책)."
+                          "동일 유저에 ACTIVE 런이 있으면 자동으로 ABANDONED 처리 후 새 ACTIVE 런을 생성한다 (유저당 ACTIVE 1개 정책). " +
+                          "또한 위치 배치가 30초 이상 끊기면 스케줄러가 ABANDONED 처리하며, 해당 런의 TrackPoint 는 일괄 삭제된다."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -102,7 +103,8 @@ public class RunController {
     @Operation(
             summary = "위치 배치 수신",
             description = "ACTIVE 세션에 위치 포인트 배치를 저장한다. elapsedSec 오름차순 정렬 + 중복 elapsedSec 제거 후 신규만 INSERT. " +
-                    "응답으로 현재까지 누적된 distance(m)와 avgPace(MM:SS/km)를 함께 반환."
+                    "응답으로 현재까지 누적된 distance(m)와 avgPace(MM:SS/km)를 함께 반환. " +
+                    "이 호출은 idle 폐기 스케줄러의 keep-alive 역할도 하며, 30초 이상 미수신 시 해당 ACTIVE 런은 ABANDONED 로 자동 전이된다."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
