@@ -46,7 +46,8 @@ public class RunController {
 
     @Operation(
             summary = "러닝 세션 시작",
-            description = "코스와 고스트를 지정해 ACTIVE 세션을 만든다. 고스트의 trackPoints 전체를 응답에 포함한다."
+            description = "코스와 고스트를 지정해 ACTIVE 세션을 만든다. 고스트의 trackPoints 전체를 응답에 포함한다. " +
+                          "동일 유저에 ACTIVE 런이 있으면 자동으로 ABANDONED 처리 후 새 ACTIVE 런을 생성한다 (유저당 ACTIVE 1개 정책)."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
