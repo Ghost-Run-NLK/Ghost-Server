@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -69,6 +70,9 @@ public class LocationBatchService {
 
             trackPointRepository.saveAll(toSave);
         }
+
+        // idle 폐기 스케줄러용 ping
+        run.touch(LocalDateTime.now());
 
         // 3) 누적 distance + avgPace 응답
         List<TrackPoint> allPoints = trackPointRepository.findAllByRunSessionIdOrderByElapsedSecAsc(run.getId());

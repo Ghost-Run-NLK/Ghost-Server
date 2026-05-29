@@ -54,6 +54,9 @@ public class RunSession extends BaseEntity {
     @Column(name = "started_at", nullable = false)
     private LocalDateTime startedAt;
 
+    @Column(name = "last_location_at")
+    private LocalDateTime lastLocationAt;
+
     @Column(name = "ended_at")
     private LocalDateTime endedAt;
 
@@ -70,12 +73,18 @@ public class RunSession extends BaseEntity {
 
     @Builder
     private RunSession(User user, Course course, RunSession ghostRun,
-                       RunStatus status, LocalDateTime startedAt) {
+                       RunStatus status, LocalDateTime startedAt,
+                       LocalDateTime lastLocationAt) {
         this.user = user;
         this.course = course;
         this.ghostRun = ghostRun;
         this.status = status;
         this.startedAt = startedAt;
+        this.lastLocationAt = lastLocationAt;
+    }
+
+    public void touch(LocalDateTime at) {
+        this.lastLocationAt = at;
     }
 
     public void complete(LocalDateTime endedAt,
@@ -87,5 +96,10 @@ public class RunSession extends BaseEntity {
         this.totalTime = totalTime;
         this.distance = distance;
         this.avgPace = avgPace;
+    }
+
+    public void abandon(LocalDateTime endedAt) {
+        this.status = RunStatus.ABANDONED;
+        this.endedAt = endedAt;
     }
 }

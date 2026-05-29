@@ -12,3 +12,10 @@ spring:
 jwt:
   secret: test-only-secret-please-do-not-use-in-production-must-be-32-bytes
   expiration-seconds: 3600
+
+ghost:
+  run:
+    # 테스트는 직접 scheduler.markIdleRunsAsAbandoned() 를 호출하므로
+    # 자동 스캔 주기는 매우 크게 잡아 백그라운드 실행으로 인한 간섭을 막는다.
+    idle-threshold-seconds: 30
+    scan-interval-seconds: 3600

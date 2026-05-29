@@ -20,7 +20,6 @@ public enum ErrorCode {
 
     // Run
     RUN_NOT_FOUND(HttpStatus.NOT_FOUND, "RUN_NOT_FOUND", "러닝 세션을 찾을 수 없습니다"),
-    RUN_ALREADY_ACTIVE(HttpStatus.CONFLICT, "RUN_ALREADY_ACTIVE", "이미 진행 중인 러닝 세션이 있습니다"),
     RUN_NOT_ACTIVE(HttpStatus.CONFLICT, "RUN_NOT_ACTIVE", "진행 중인 러닝 세션이 아닙니다"),
     GHOST_RUN_NOT_FOUND(HttpStatus.NOT_FOUND, "GHOST_RUN_NOT_FOUND", "고스트 기록을 찾을 수 없습니다"),
     OUT_OF_START_RADIUS(HttpStatus.BAD_REQUEST, "OUT_OF_START_RADIUS", "출발지 반경을 벗어났습니다");
