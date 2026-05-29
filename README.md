@@ -8,17 +8,24 @@
 
 데모 단계에서는 로그인을 비활성화하고 클라가 매 호출에 `userId`(예: `user_1`)를 쿼리 파라미터로 전달합니다. 따라서 데모 시작 전 **유저 row 시드**가 필요합니다.
 
-### 1) 유저 INSERT (예: 2명)
+### 1) 시드 SQL 실행 (유저 15명 + 코스 2개)
 
-```sql
-INSERT INTO users (social_provider, social_id, nickname, avatar_url, created_at, updated_at)
-VALUES
-  ('KAKAO', 'demo-1', '데모유저1', '/avatars/bear.png',    NOW(), NOW()),
-  ('KAKAO', 'demo-2', '데모유저2', '/avatars/chicken.png', NOW(), NOW());
+전체 데모 데이터는 [`db/seed.sql`](./db/seed.sql) 에 정리되어 있습니다. 앱이 한 번 이상 기동되어 스키마가 생성된 뒤 실행하세요.
+
+```bash
+# 로컬 MySQL
+mysql -u root -p ghost < db/seed.sql
+
+# EC2 MySQL (SSH 후)
+scp db/seed.sql ec2-user@<EC2_HOST>:~/seed.sql
+ssh ec2-user@<EC2_HOST>
+mysql -u root -p ghost < ~/seed.sql
 ```
 
-- 삽입된 row의 PK가 1, 2면 호출 시 `userId=user_1`, `userId=user_2`로 사용
-- `social_provider`/`social_id`는 unique constraint(`uk_users_social`) 만족용 더미값
+- 유저 PK 1~15 → 호출 시 `userId=user_1` ~ `userId=user_15`
+- 코스 PK 1, 2 → `courseId=course_1` (성성호수 공원), `course_2` (단대호수 공원)
+- 재실행 안전: `INSERT IGNORE` + route points DELETE 후 재삽입
+- PK 를 명시하므로 **데모 전용 DB** 에서만 사용 (운영 데이터 혼재 시 충돌 위험)
 
 ### 2) 프로필 이미지
 
